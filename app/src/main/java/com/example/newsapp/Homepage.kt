@@ -1,5 +1,6 @@
 package com.example.newsapp
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,20 +14,28 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.kwabenaberko.newsapilib.models.Article
 
 
@@ -62,6 +71,14 @@ fun Homepage(viewModel: NewsviewModel) {
 @Composable
 fun CategoriesBar(viewModel: NewsviewModel) {
 
+    var searchQuery by remember {
+        mutableStateOf("")
+    }
+
+    var isSearchExpanded by remember {
+        mutableStateOf(false)
+    }
+
     val categoriesList = listOf(
         "GENERAL",
         "BUSINESS",
@@ -76,12 +93,26 @@ fun CategoriesBar(viewModel: NewsviewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
-        verticalAlignment  = Alignment.CenterVertically
-    ){
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        if (isSearchExpanded) {
+
+        } else {
+            IconButton(onClick = {
+                isSearchExpanded = true
+            }) {
+
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search icon"
+                )
+            }
+        }
 
         categoriesList.forEach { category ->
             Button(
-                onClick = { },
+                onClick = { viewModel.fetchNewsTopHeadlines(category) },
                 modifier = Modifier.padding(4.dp)
             ) {
                 Text(text = category)
@@ -104,7 +135,8 @@ fun ArticleItem(article: Article) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = article.urlToImage?:"https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
+                model = article.urlToImage
+                    ?: "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
                 contentDescription = "article image",
                 modifier = Modifier
                     .size(80.dp)
@@ -113,11 +145,12 @@ fun ArticleItem(article: Article) {
             )
 
             Column(
-               modifier = Modifier
-                   .fillMaxSize()
-                   .padding(8.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
             ) {
-                Text(article.title,
+                Text(
+                    article.title,
                     fontWeight = FontWeight.Bold,
                     maxLines = 3
                 )
