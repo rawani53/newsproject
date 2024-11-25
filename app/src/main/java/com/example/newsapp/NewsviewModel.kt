@@ -18,11 +18,11 @@ class NewsviewModel : ViewModel() {
     val _articles = MutableLiveData<List<Article>>()
     val articles : LiveData<List<Article>> = _articles
 
-    fun fetchNewsTopHeadlines() {
+    fun fetchNewsTopHeadlines(category : String = "GENERAL") {
 
         val newsApiClient = NewsApiClient(constant.apikey)
 
-        val request = TopHeadlinesRequest.Builder().language("en").build()
+        val request = TopHeadlinesRequest.Builder().language("en").category(category).build()
 
         newsApiClient.getTopHeadlines(request, object : NewsApiClient.ArticlesResponseCallback {
             override fun onSuccess(response: ArticleResponse?) {
