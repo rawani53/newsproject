@@ -16,9 +16,9 @@ class NewsviewModel : ViewModel() {
     }
 
     val _articles = MutableLiveData<List<Article>>()
-    val articles : LiveData<List<Article>> = _articles
+    val articles: LiveData<List<Article>> = _articles
 
-    fun fetchNewsTopHeadlines(category : String = "GENERAL") {
+    fun fetchNewsTopHeadlines(category: String = "GENERAL") {
 
         val newsApiClient = NewsApiClient(constant.apikey)
 
