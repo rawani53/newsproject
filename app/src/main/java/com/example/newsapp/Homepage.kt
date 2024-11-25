@@ -108,8 +108,28 @@ fun CategoriesBar(viewModel: NewsviewModel) {
 
                 modifier = Modifier.padding(8.dp).height(48.dp).border(1.dp, Color.Gray, CircleShape)
                     .clip(CircleShape),
+
                 value = searchQuery,
-                onValueChange = { searchQuery = it })
+                onValueChange = { searchQuery = it },
+
+                trailingIcon = {
+
+                    IconButton(onClick = {
+                        isSearchExpanded = false
+
+                        if(searchQuery.isNotEmpty()){
+                            viewModel.fetchEverythingWithQuery(searchQuery)
+                            }
+                        }
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "collapse search bar"
+                        )
+                    }
+
+                } )
 
         } else {
 
