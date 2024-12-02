@@ -16,6 +16,7 @@ class NewsviewModel : ViewModel() {
         fetchNewsTopHeadlines()
     }
 
+
     val _articles = MutableLiveData<List<Article>>()
     val articles: LiveData<List<Article>> = _articles
 
