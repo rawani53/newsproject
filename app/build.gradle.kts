@@ -64,4 +64,27 @@ dependencies {
     implementation (libs.androidx.runtime)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    val nav_version = "2.8.4"
+
+    // Jetpack Compose Integration
+    implementation (libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
+    // firebase dependency
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+
+    //
+    implementation (libs.androidx.credentials)
+    implementation (libs.androidx.credentials.play.services.auth)
+    implementation (libs.play.services.auth)
+    implementation (libs.googleid)
+
+    //splash screen dependency
+    implementation(libs.androidx.core.splashscreen)
+
+
+
 }
