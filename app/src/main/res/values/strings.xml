@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Newsapp</string>
-
+    <string name="web_client_Id"></string>
 </resources>
