@@ -1,8 +1,10 @@
 package com.example.newsapp
 
 import android.graphics.Typeface
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -38,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
@@ -73,7 +77,7 @@ fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
         ) {
 
             items(articles) { article ->
-                ArticleItem(article , navController)
+                ArticleItem(article, navController)
             }
 
 
@@ -115,7 +119,10 @@ fun CategoriesBar(viewModel: NewsviewModel) {
 
             OutlinedTextField(
 
-                modifier = Modifier.padding(8.dp).height(48.dp).border(1.dp, Color.Gray, CircleShape)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .height(48.dp)
+                    .border(1.dp, Color.Gray, CircleShape)
                     .clip(CircleShape),
 
                 value = searchQuery,
@@ -126,10 +133,10 @@ fun CategoriesBar(viewModel: NewsviewModel) {
                     IconButton(onClick = {
                         isSearchExpanded = false
 
-                        if(searchQuery.isNotEmpty()){
+                        if (searchQuery.isNotEmpty()) {
                             viewModel.fetchEverythingWithQuery(searchQuery)
-                            }
                         }
+                    }
                     ) {
 
                         Icon(
@@ -138,7 +145,7 @@ fun CategoriesBar(viewModel: NewsviewModel) {
                         )
                     }
 
-                } )
+                })
 
         } else {
 
@@ -167,57 +174,75 @@ fun CategoriesBar(viewModel: NewsviewModel) {
 }
 
 @Composable
-fun ArticleItem(article: Article , navController: NavHostController) {
+fun ArticleItem(article: Article, navController: NavHostController) {
     Card(
-        modifier = Modifier.padding(8.dp).height(200.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxSize(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        onClick = { navController.navigate(NewsArticleScreen(article.url))}
+        onClick = { navController.navigate(NewsArticleScreen(article.url)) },
+        colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
     ) {
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        //  Column (modifier = Modifier
+        //      .fillMaxSize(),
+        //      verticalArrangement = Arrangement.Top,
+        //      horizontalAlignment = Alignment.CenterHorizontally){
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
 
+            //element1
             AsyncImage(
                 model = article.urlToImage
                     ?: "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
                 contentDescription = "article image",
-                modifier = Modifier
-                    //.size(150.dp)
-                   // .aspectRatio(.7f)
-                    //.requiredWidth(1500.dp)
-                    //.requiredHeight(250.dp),
-                ,contentScale = ContentScale.FillBounds
-                , alignment =Alignment.Center
+                modifier = Modifier.size(400.dp, 250.dp),
+                contentScale = ContentScale.FillBounds
             )
 
-
-            Column(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
+                    .matchParentSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
+                            ),
+                            startY = 200f
+                        )
+                    )
+            ) { }
+
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .padding(8.dp), contentAlignment = Alignment.BottomStart
             ) {
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        article.title,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 3
-                    )
+                Text(
+                    article.title,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 2,
+                    color = Color.White,
+                    fontFamily = FontFamily(Typeface.SERIF)
+                )
 
-                    Text(
-                        text = article.source.name,
-                        maxLines = 1,
-                        fontSize = 14.sp
-                    )
-                }
+
+                //sube2
+                //  Text(
+                //         text = article.source.name,
+                //         maxLines = 1,
+                //         fontSize = 14.sp
+                //    )
             }
+
         }
     }
 }
-
+//}
 
 
 
