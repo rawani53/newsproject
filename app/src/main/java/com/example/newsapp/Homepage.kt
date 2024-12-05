@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,13 +21,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Badge
@@ -35,6 +39,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,12 +63,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.kwabenaberko.newsapilib.models.Article
@@ -143,7 +150,7 @@ fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
                             }
                         },
 
-                        label = {Text(item.title)}
+                        label = { Text(item.title) }
 
                     )
                 }
@@ -182,12 +189,14 @@ fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
 
                     LazyColumn(
 
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
 
                     ) {
 
                         items(articles) { article ->
                             ArticleItem(article, navController)
+                            //HorizontalDivider(modifier = Modifier.width(350.dp), thickness = 1.dp)
                         }
 
 
@@ -328,169 +337,113 @@ fun CategoriesBar(viewModel: NewsviewModel) {
 @Composable
 fun ArticleItem(article: Article, navController: NavHostController) {
 
+    Card(
+        modifier = Modifier
+            .padding(14.dp)
+            .fillMaxSize(),
 
-    var cardisSelected by remember { mutableStateOf(false) }
+        elevation = CardDefaults.cardElevation(5.dp),
 
+        onClick = {
+            navController.navigate(NewsArticleScreen(article.url))
+        },
 
-    if (cardisSelected) {
+        colors = CardDefaults.cardColors(containerColor = Color.Unspecified),
 
-        Card(
-
-
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize(),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-
-            onClick = {
-                navController.navigate(NewsArticleScreen(article.url))
-            },
-
-            colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
-
-            border = BorderStroke(3.dp, Color.Blue)
+        shape = RoundedCornerShape(30.dp)
+    ) {
 
 
-        ) {
+        Column(verticalArrangement = Arrangement.Top) {
 
-            //  Column (modifier = Modifier
-            //      .fillMaxSize(),
-            //      verticalArrangement = Arrangement.Top,
-            //      horizontalAlignment = Alignment.CenterHorizontally){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+
+            AsyncImage(
+                model = article.urlToImage
+                    ?: "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
+                contentDescription = "article image",
+                modifier = Modifier.size(395.dp, 175.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                article.title,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 2,
+                fontSize = 18.sp,
+                color = Color.Unspecified,
+                //fontFamily = FontFamily(Typeface.SANS_SERIF),
+                modifier = Modifier.padding(
+                    top = 6.dp,
+                    start = 10.dp,
+                    end = 6.dp,
+                    bottom = 6.dp
+                )
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Row(
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 3.dp, bottom = 6.dp, start = 6.dp, end = 6.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+
             ) {
 
-                //element1
-                AsyncImage(
-                    model = article.urlToImage
-                        ?: "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
-                    contentDescription = "article image",
-                    modifier = Modifier.size(400.dp, 250.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-
-                Box(
+                IconButton(
+                    onClick = {},
                     modifier = Modifier
-                        .matchParentSize()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black
-                                ),
-                                startY = 200f
-                            )
+                        .size(40.dp, 40.dp)
+                        .padding(
+                            bottom = 4.dp,
+                            start = 8.dp
                         )
-                ) { }
-
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .padding(8.dp), contentAlignment = Alignment.BottomStart
                 ) {
 
-                    Text(
-                        article.title,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2,
-                        color = Color.White,
-                        fontFamily = FontFamily(Typeface.SERIF)
+                    Icon(
+                        imageVector = Icons.Outlined.AddCircle,
+                        contentDescription = "",
+                        modifier = Modifier.size(40.dp,40.dp)
                     )
 
+                }
 
-                    //sube2
-                    //  Text(
-                    //         text = article.source.name,
-                    //         maxLines = 1,
-                    //         fontSize = 14.sp
-                    //    )
+
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier
+                        .size(40.dp, 40.dp)
+                        .padding(
+                            bottom = 4.dp,
+                            end = 4.dp
+                        )
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Outlined.MoreVert,
+                        contentDescription = "",
+                        modifier = Modifier.size(30.dp,30.dp)
+                    )
+
                 }
 
             }
+
+
+            //sube2
+            //  Text(
+            //         text = article.source.name,
+            //         maxLines = 1,
+            //         fontSize = 14.sp
+            //    )
+
+
         }
-    } else {
-
-
-        Card(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize(),
-
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-
-            onClick = {
-                navController.navigate(NewsArticleScreen(article.url))
-                cardisSelected = !cardisSelected
-            },
-
-            colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
-        ) {
-
-            //  Column (modifier = Modifier
-            //      .fillMaxSize(),
-            //      verticalArrangement = Arrangement.Top,
-            //      horizontalAlignment = Alignment.CenterHorizontally){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-
-                //element1
-                AsyncImage(
-                    model = article.urlToImage
-                        ?: "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
-                    contentDescription = "article image",
-                    modifier = Modifier.size(400.dp, 250.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black
-                                ),
-                                startY = 200f
-                            )
-                        )
-                ) { }
-
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .padding(8.dp), contentAlignment = Alignment.BottomStart
-                ) {
-
-                    Text(
-                        article.title,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2,
-                        color = Color.White,
-                        fontFamily = FontFamily(Typeface.SANS_SERIF)
-                    )
-
-
-                    //sube2
-                    //  Text(
-                    //         text = article.source.name,
-                    //         maxLines = 1,
-                    //         fontSize = 14.sp
-                    //    )
-                }
-
-            }
-        }
-
-
     }
 }
-
-
 
 
 
