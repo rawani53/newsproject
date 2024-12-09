@@ -30,13 +30,17 @@ class GoogleSignInUtils {
             logintoast: () -> Unit,
             login : () -> Unit
         ) {
-            val credentialManager = CredentialManager.create(context)
 
+            val credentialManager = CredentialManager.create(context)
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(getCredentialOptions(context))
                 .build()
+
+
             scope.launch {
                 try {
+
+
                     val result = credentialManager.getCredential(context,request)
                     when(result.credential){
                         is CustomCredential ->{
@@ -73,8 +77,8 @@ class GoogleSignInUtils {
 
         private fun getCredentialOptions(context: Context): CredentialOption {
             return GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false)
-                .setAutoSelectEnabled(false)
+                .setFilterByAuthorizedAccounts(true)
+                .setAutoSelectEnabled(true)
                 .setServerClientId(context.getString(R.string.web_client_Id))
                 .build()
         }
