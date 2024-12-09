@@ -84,7 +84,11 @@ fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
     val articles by viewModel.articles.observeAsState(emptyList()) // Different from what is taught
     // if : not work the uses : val articles by newsViewModel.articles.observeAsState(emptyList())
 
-    // var loading = viewModel.loading.value
+    val filteredarticles = articles.filterNotNull().filter { !it.urlToImage.isNullOrBlank() }
+
+    val nonullarticles = filteredarticles.filter { !it.author.isNullOrBlank()}
+        .filter {!it.publishedAt.isNullOrBlank()}
+
 
     val navTabItems = listOf(
 
@@ -194,9 +198,16 @@ fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
 
                     ) {
 
-                        items(articles) { article ->
-                            ArticleItem(article, navController)
-                            //HorizontalDivider(modifier = Modifier.width(350.dp), thickness = 1.dp)
+                            items(nonullarticles) { article ->
+                                ArticleItem(
+                                    article,
+                                    navController,
+                                    removednewsimage = "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg"
+                                )
+
+                            }
+
+
                         }
 
 
