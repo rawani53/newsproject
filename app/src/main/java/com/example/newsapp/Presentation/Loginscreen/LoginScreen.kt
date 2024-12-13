@@ -1,4 +1,4 @@
-package com.example.newsapp
+package com.example.newsapp.Presentation.Loginscreen
 
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,13 +36,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.newsapp.Navigation.HomePageScreen
+import com.example.newsapp.Logic.NewsviewModel
+import com.example.newsapp.R
+import com.example.newsapp.auth.GoogleSignInUtils
 
 @Composable
 fun LoginScreen(viewModel: NewsviewModel, navController: NavController) {
@@ -123,7 +125,6 @@ fun LoginScreen(viewModel: NewsviewModel, navController: NavController) {
 
 
             Text("Login to your account", color = Color.DarkGray)
-
 
             OutlinedTextField(value = email, onValueChange = { email = it }, label = {
 

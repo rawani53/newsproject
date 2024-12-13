@@ -1,8 +1,9 @@
-package com.example.newsapp
+package com.example.newsapp.auth
 
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.credentials.CredentialManager
@@ -11,6 +12,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
+import com.example.newsapp.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.Firebase
@@ -42,13 +44,18 @@ class GoogleSignInUtils {
 
 
                     val result = credentialManager.getCredential(context,request)
+                    Log.d("fetched credential","${result.credential}")
+
                     when(result.credential){
                         is CustomCredential ->{
+
                             if(result.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL){
                                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
                                 val googleTokenId = googleIdTokenCredential.idToken
                                 val authCredential = GoogleAuthProvider.getCredential(googleTokenId,null)
                                 val user = Firebase.auth.signInWithCredential(authCredential).await().user
+                                Log.d("firebase user","${user?.displayName}")
+
                                 user?.let {
                                     if(it.isAnonymous.not()){
                                         logintoast.invoke()
@@ -63,6 +70,7 @@ class GoogleSignInUtils {
                     }
                 }catch (e: NoCredentialException){
                     launcher?.launch(getIntent())
+                    Log.d("catch","Intent triggered to add account")
                 }catch (e: GetCredentialException){
                     e.printStackTrace()
                 }
@@ -77,8 +85,8 @@ class GoogleSignInUtils {
 
         private fun getCredentialOptions(context: Context): CredentialOption {
             return GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(true)
-                .setAutoSelectEnabled(true)
+                .setFilterByAuthorizedAccounts(false)
+                .setAutoSelectEnabled(false)
                 .setServerClientId(context.getString(R.string.web_client_Id))
                 .build()
         }

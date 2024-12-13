@@ -1,10 +1,7 @@
-package com.example.newsapp
+package com.example.newsapp.Logic
 
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +33,7 @@ class NewsviewModel : ViewModel() {
 
         viewModelScope.launch {
             loading.value = true
-                delay(2000)
+               // delay(2000)
 
             val newsApiClient = NewsApiClient(constant.apikey)
 

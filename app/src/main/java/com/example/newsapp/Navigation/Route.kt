@@ -1,4 +1,4 @@
-package com.example.newsapp
+package com.example.newsapp.Navigation
 
 import kotlinx.serialization.Serializable
 
