@@ -15,7 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class NewsviewModel : ViewModel() {
+class NewsViewModel : ViewModel() {
 
     val _articles = MutableLiveData<List<Article>>()
     val articles: LiveData<List<Article>> = _articles

@@ -27,10 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.newsapp.data.api.NewsviewModel
+import com.example.newsapp.data.api.NewsViewModel
 
 @Composable
-fun GetSearchBar(viewModel: NewsviewModel) {
+fun GetSearchBar(viewModel: NewsViewModel) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchExpanded by remember { mutableStateOf(false) }
 

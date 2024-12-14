@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.newsapp.data.api.NewsviewModel
+import com.example.newsapp.data.api.NewsViewModel
 import com.example.newsapp.Presentation.Homepage.Homepage
 import com.example.newsapp.Presentation.Loginscreen.LoginScreen
 import com.example.newsapp.Presentation.newsArticlePage.NewsArticlepage
@@ -15,7 +15,7 @@ import com.example.newsapp.Presentation.newsArticlePage.NewsArticlepage
 @Composable
 fun CallNavHost(){
     val navController = rememberNavController()
-    val viewModel: NewsviewModel = viewModel()
+    val viewModel: NewsViewModel = viewModel()
 
     NavHost(
         navController = navController,

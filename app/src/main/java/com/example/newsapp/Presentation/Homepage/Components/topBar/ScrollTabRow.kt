@@ -12,10 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.newsapp.data.api.NewsviewModel
+import com.example.newsapp.data.api.NewsViewModel
 
 @Composable
-fun GetScrollableTabRow(viewModel: NewsviewModel) {
+fun GetScrollableTabRow(viewModel: NewsViewModel) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val categoriesList = listOf(
         "GENERAL",

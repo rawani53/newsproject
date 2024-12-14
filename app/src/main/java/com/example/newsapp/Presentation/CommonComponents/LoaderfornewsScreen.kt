@@ -25,7 +25,7 @@ fun DelayedProgressBar(delayMillis: Long) {
         delay(delayMillis)
         showProgress = false
     }
-    // Display the progress bar conditionally
+
     if (showProgress) {
         Box(
             modifier = Modifier

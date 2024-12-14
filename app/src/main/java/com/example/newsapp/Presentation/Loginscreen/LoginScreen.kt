@@ -38,13 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsapp.Presentation.Navigation.HomePageScreen
-import com.example.newsapp.data.api.NewsviewModel
+import com.example.newsapp.data.api.NewsViewModel
 import com.example.newsapp.Presentation.Loginscreen.Components.BackGroundGradient
 import com.example.newsapp.R
 import com.example.newsapp.domain.auth.GoogleSignInUtils
 
 @Composable
-fun LoginScreen(viewModel: NewsviewModel, navController: NavController) {
+fun LoginScreen(viewModel: NewsViewModel, navController: NavController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

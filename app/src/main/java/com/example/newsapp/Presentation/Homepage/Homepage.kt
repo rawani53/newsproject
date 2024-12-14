@@ -17,7 +17,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavHostController
 import com.example.newsapp.Presentation.CommonComponents.CircularIndeterminateProgressBar
-import com.example.newsapp.data.api.NewsviewModel
+import com.example.newsapp.data.api.NewsViewModel
 import com.example.newsapp.Presentation.Homepage.Components.bottombar.BottomNavBar
 import com.example.newsapp.Presentation.Homepage.Components.body.BoxGradient
 import com.example.newsapp.Presentation.Homepage.Components.body.CardComponent
@@ -26,7 +26,7 @@ import com.example.newsapp.Presentation.Homepage.Components.topBar.CategoriesBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
+fun Homepage(viewModel: NewsViewModel, navController: NavHostController) {
 
     val isLoading = viewModel.loading.value
     val articles by viewModel.articles.observeAsState(emptyList())
