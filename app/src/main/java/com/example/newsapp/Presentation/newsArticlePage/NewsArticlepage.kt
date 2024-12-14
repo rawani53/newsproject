@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.newsapp.Components.DelayedProgressBar
+import com.example.newsapp.Presentation.CommonComponents.DelayedProgressBar
 
 
 @Composable

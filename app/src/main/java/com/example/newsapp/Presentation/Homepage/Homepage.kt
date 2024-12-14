@@ -16,19 +16,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavHostController
-import com.example.newsapp.Components.CircularIndeterminateProgressBar
-import com.example.newsapp.Logic.NewsviewModel
-import com.example.newsapp.Presentation.Homepage.Components.BottomNavBar
-import com.example.newsapp.Presentation.Homepage.Components.BoxGradient
-import com.example.newsapp.Presentation.Homepage.Components.CardComponent
+import com.example.newsapp.Presentation.CommonComponents.CircularIndeterminateProgressBar
+import com.example.newsapp.data.api.NewsviewModel
+import com.example.newsapp.Presentation.Homepage.Components.bottombar.BottomNavBar
+import com.example.newsapp.Presentation.Homepage.Components.body.BoxGradient
+import com.example.newsapp.Presentation.Homepage.Components.body.CardComponent
+import com.example.newsapp.Presentation.Homepage.Components.topBar.CategoriesBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
+
     val isLoading = viewModel.loading.value
-    val articles by viewModel.articles.observeAsState(emptyList())// Different from what is taught
-    // if : not work the uses : val articles by newsViewModel.articles.observeAsState(emptyList())
+    val articles by viewModel.articles.observeAsState(emptyList())
     val filteredArticles = articles.filterNotNull()
         .filter { !(it.urlToImage.isNullOrBlank() || it.author.isNullOrBlank() || it.publishedAt.isNullOrBlank() || it.url.isNullOrBlank()) }
 
@@ -54,8 +55,7 @@ fun Homepage(viewModel: NewsviewModel, navController: NavHostController) {
                             navController = navController,
                             boxGradient = { BoxGradient() },
                             removednewsimage = "https://thumbs.dreamstime.com/b/image-not-available-icon-image-not-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-330178688.jpg",
-
-                        )
+                            )
                     }
                 }
             }
