@@ -6,70 +6,64 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newsapp.data.api.RetrofitInstance
+import com.example.newsapp.model.homePage.Article
+import com.example.newsapp.model.homePage.NewsResponse
 import com.example.newsapp.utils.constant
-import com.kwabenaberko.newsapilib.NewsApiClient
-import com.kwabenaberko.newsapilib.models.Article
-import com.kwabenaberko.newsapilib.models.request.EverythingRequest
-import com.kwabenaberko.newsapilib.models.request.TopHeadlinesRequest
-import com.kwabenaberko.newsapilib.models.response.ArticleResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import retrofit2.Response
+import java.io.IOException
 
 
 class NewsViewModel : ViewModel() {
 
+
     val _articles = MutableLiveData<List<Article>>()
-    val articles: LiveData<List<Article>> = _articles
+    val articles: MutableLiveData<List<Article>> = _articles
     val loading = mutableStateOf(false)
 
-    fun fetchEverythingWithQuery(query: String) {
+    fun fetchNewsTopHeadlines(category: String = "general") {   // CATEGORIES AND GENERAL
+
         viewModelScope.launch {
             loading.value = true
 
-            val newsApiClient = NewsApiClient(constant.apikey)
-            val request = EverythingRequest.Builder().language("en").q(query).build()
+            val response = RetrofitInstance.api.fetchNewsTopHeadlines(category = category)
+            response.body()?.articles?.let {
+                it.forEach { art -> Log.d("API_OUTPUT", art.publishedAt) }
+                _articles.postValue(it)
+                Log.d("APi", "Search results fetched")
+                loading.value = false
 
-            newsApiClient.getEverything(request, object : NewsApiClient.ArticlesResponseCallback {
-                override fun onSuccess(response: ArticleResponse?) {
-                    response?.articles?.let {
-                        _articles.postValue(it)
-                        Log.d("APi", "Search results fetched")
-                        loading.value = false
-                    }
-                }
-                override fun onFailure(throwable: Throwable?) {
-                    if (throwable != null) {
-                        Log.i("NEWSAPI Response failed", throwable.localizedMessage)
-                    }
-                }
-            })
+            }
+
         }
+
     }
 
-    fun fetchNewsTopHeadlines(category: String = "GENERAL") {
+
+    fun fetchEverythingWithQuery(query: String) {  //SEARCH
         viewModelScope.launch {
             loading.value = true
-            delay(2000)
 
-            val newsApiClient = NewsApiClient(constant.apikey)
-            val request = TopHeadlinesRequest.Builder().language("en").category(category).build()
+            val response: Response<NewsResponse> =
+                RetrofitInstance.api.fetchEverythingWithQuery(searchQuery = query)
 
-            newsApiClient.getTopHeadlines(request, object : NewsApiClient.ArticlesResponseCallback {
-                override fun onSuccess(response: ArticleResponse?) {
-                    response?.articles?.let { it ->
-                        it.forEach { art -> Log.d("API_OUTPUT", art.publishedAt) }
-                        _articles.postValue(it)
-                        loading.value = false
-                    }
+            if (response.isSuccessful) {
+
+                response.body()?.articles?.let {
+                    _articles.postValue(it)
+
+                    Log.d("APi", "Search results fetched")
+                    loading.value = false
                 }
-                override fun onFailure(throwable: Throwable?) {
-                    if (throwable != null) {
-                        Log.i("NEWSAPI Response failed", throwable.localizedMessage)
-                    }
-                }
-
-            })
-
+            } else {
+                Log.d("api", "api failed")
+            }
         }
     }
 }
+
+
+
